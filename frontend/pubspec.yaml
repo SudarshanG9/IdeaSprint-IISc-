@@ -1,0 +1,31 @@
+name: scanspeak
+description: Accessibility QR Scanner - Android + Web
+
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Works on Android + Web (uses webcam on browser)
+  mobile_scanner: ^5.2.3
+
+  # Works on Android; Web uses JS interop (see tts_service.dart)
+  flutter_tts: ^4.2.0
+
+  # Works on both platforms
+  shared_preferences: ^2.3.2
+  http: ^1.2.2
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
