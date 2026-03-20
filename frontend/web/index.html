@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="$FLUTTER_BASE_HREF">
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="ScanSpeak - Accessibility QR Scanner">
+
+  <!-- Needed for webcam QR scanning in Chrome -->
+  <meta http-equiv="Permissions-Policy" content="camera=*">
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="ScanSpeak">
+
+  <!-- Mobile viewport -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <title>ScanSpeak</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    body {
+      background-color: #0A0A0F;
+      margin: 0;
+      padding: 0;
+    }
+    /* Center on desktop browsers */
+    @media (min-width: 600px) {
+      #flutter_target {
+        max-width: 430px;
+        margin: 0 auto;
+        box-shadow: 0 0 60px rgba(0,0,0,0.8);
+        min-height: 100vh;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="flutter_target"></div>
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>
