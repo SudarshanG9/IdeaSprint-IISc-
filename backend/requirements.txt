@@ -5,3 +5,4 @@ pydantic
 requests
 supabase
 python-dotenv
+qrcode[pil]
