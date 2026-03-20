@@ -2,6 +2,7 @@
 from app.services.generator import generate_description
 from app.services.translator import translate_text
 from app.services.tts import text_to_speech
+from app.services.storage import upload_audio
 
 
 LANGUAGE_MAP = {
@@ -71,7 +72,10 @@ def process_product(product, language="en"):
     # Step 3: Convert to speech using Sarvam
     audio_path = text_to_speech(translated_text, product.id, language)
 
+    # Step 4: Upload to Supabase
+    public_url = upload_audio(audio_path, product.id, language)
+
     return {
         "text": translated_text,
-        "audio": audio_path
+        "audio": public_url
     }
