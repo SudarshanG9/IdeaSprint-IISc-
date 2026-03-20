@@ -18,12 +18,45 @@ export function useProducts() {
   const [products, setProducts] = useState(load);
   useEffect(() => { persist(products); }, [products]);
 
-  const addProduct = (data) => {
-    idc++;
-    const date = new Date().toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
-    const p = { ...data, id: "PRD" + String(idc).padStart(3, "0"), date };
-    setProducts((prev) => [p, ...prev]);
-    return p;
+  const addProduct = async (data) => {
+    let descriptionSegments = [];
+    if (data.ingredients) descriptionSegments.push(`Ingredients: ${data.ingredients}`);
+    if (data.warnings) descriptionSegments.push(`Warnings: ${data.warnings}`);
+    const description = descriptionSegments.length > 0 ? descriptionSegments.join(". ") : "No extra description provided.";
+
+    const payload = {
+      name: data.name,
+      category: data.cat,
+      price: parseFloat(data.price) || 0,
+      expiry_date: data.expiry ? new Date(data.expiry).toISOString() : new Date().toISOString(),
+      description: description,
+      language: "en"
+    };
+
+    try {
+      const response = await fetch("http://192.168.31.40:8000/product", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      if (!response.ok) throw new Error("Failed to create product on backend.");
+      
+      const result = await response.json();
+      const date = new Date().toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+      
+      const p = {
+        ...data,
+        id: result.product_id,
+        qr_url: result.qr_url,
+        scan_url: result.scan_url,
+        date
+      };
+      setProducts((prev) => [p, ...prev]);
+      return p;
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   };
 
   const updateProduct = (id, data) => {

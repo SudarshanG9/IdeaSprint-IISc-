@@ -6,12 +6,16 @@ const EMPTY = { name: "", cat: "", price: "", expiry: "", ingredients: "", warni
 export default function AddProduct() {
   const { addProduct, navigate, showToast } = useApp();
   const [values, setValues] = useState(EMPTY);
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!values.name.trim()) { showToast("Please enter a product name", "error"); return; }
     if (!values.cat) { showToast("Please select a category", "error"); return; }
-    const product = addProduct(values);
-    navigate("output", { product });
-    showToast("QR and description generated!");
+    try {
+      const product = await addProduct(values);
+      navigate("output", { product });
+      showToast("QR and description generated!");
+    } catch (err) {
+      showToast("Error connecting to server", "error");
+    }
   };
   return (
     <div className="fade-up">

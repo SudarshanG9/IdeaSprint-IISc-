@@ -54,10 +54,10 @@ class _ScannerScreenState extends State<ScannerScreen> {
     setState(() { _state = _State.detected; _msg = AppStrings.productDetected; });
     await _tts.speak('Product detected. Loading information.');
 
-    // Extract ID from URL like https://yourbackend.com/product/DEMO001
+    // Extract ID from URL like https://yourbackend.com/p/1
     String id = raw;
-    if (raw.contains('/product/')) {
-      id = raw.split('/product/').last.split('?').first;
+    if (raw.contains('/p/')) {
+      id = raw.split('/p/').last.split('?').first;
     }
 
     await _load(id);
@@ -67,8 +67,8 @@ class _ScannerScreenState extends State<ScannerScreen> {
     setState(() { _state = _State.loading; _msg = 'Fetching product…'; });
 
     // ── Switch to fetchProduct(id) once backend is ready ──────────────────
-    final result = await _svc.fetchMock(id);
-    // final result = await _svc.fetchProduct(id);
+    // final result = await _svc.fetchMock(id);
+    final result = await _svc.fetchProduct(id);
 
     if (!mounted) return;
 

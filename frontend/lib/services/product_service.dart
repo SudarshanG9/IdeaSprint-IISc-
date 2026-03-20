@@ -24,16 +24,24 @@ class ProductService {
   ProductService._();
 
   // ── Point this to your teammate's backend ──────────────────────────────────
-  // e.g. 'http://localhost:5000'  or  'https://your-backend.onrender.com'
-  static const String _baseUrl = 'http://localhost:5000';
+  // Use 192.168.31.40 for physical Android device testing on local Wi-Fi
+  static const String _baseUrl = 'http://192.168.31.40:8000';
   // ──────────────────────────────────────────────────────────────────────────
 
-  /// Real API call — swap fetchMock → fetchProduct when backend is ready
+  /// Real API call
   Future<ProductResult> fetchProduct(String productId) async {
     try {
+      final tts = TtsService();
+      final fullCode = await tts.getSavedLanguage();
+      final lang = fullCode.split('-').first; // e.g., 'ta' from 'ta-IN'
+
       final res = await http
-          .get(Uri.parse('$_baseUrl/product/$productId'))
-          .timeout(const Duration(seconds: 10));
+          .get(
+            Uri.parse('$_baseUrl/p/$productId?lang=$lang'),
+            headers: {'X-App-Client': 'blind-app'},
+          )
+          .timeout(const Duration(seconds: 15));
+          
       if (res.statusCode == 200) {
         final json = jsonDecode(res.body) as Map<String, dynamic>;
         final product = Product.fromJson(json);

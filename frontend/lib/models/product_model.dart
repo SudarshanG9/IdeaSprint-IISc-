@@ -7,6 +7,7 @@ class Product {
   final String description;
   final List<String> ingredients;
   final List<String> warnings;
+  final String audioUrl;
 
   const Product({
     required this.id,
@@ -15,21 +16,24 @@ class Product {
     required this.description,
     required this.ingredients,
     required this.warnings,
+    this.audioUrl = '',
   });
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
-    id:          json['id']?.toString() ?? '',
+    id:          json['product_id']?.toString() ?? json['id']?.toString() ?? '',
     name:        json['name']?.toString() ?? 'Unknown Product',
     category:    json['category']?.toString() ?? '',
     description: json['description']?.toString() ?? '',
     ingredients: List<String>.from(json['ingredients'] ?? []),
     warnings:    List<String>.from(json['warnings'] ?? []),
+    audioUrl:    json['audio_url']?.toString() ?? '',
   );
 
   Map<String, dynamic> toJson() => {
     'id': id, 'name': name, 'category': category,
     'description': description,
     'ingredients': ingredients, 'warnings': warnings,
+    'audio_url': audioUrl,
   };
 
   String get primaryAudio {

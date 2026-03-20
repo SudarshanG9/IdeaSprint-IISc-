@@ -55,7 +55,11 @@ export default function OutputScreen({ product }) {
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "200px 1fr", gap: 20, alignItems: "start" }}>
         <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--r-lg)", padding: "20px 16px", display: "flex", flexDirection: "column", alignItems: "center", gap: 14 }}>
-          <QRDisplay productId={product.id} />
+          {product.qr_url ? (
+            <img src={product.qr_url} alt="QR Code" style={{ width: 150, height: 150, borderRadius: 10 }} />
+          ) : (
+            <QRDisplay productId={product.id} />
+          )}
           <div style={{ textAlign: "center" }}><div style={{ fontSize: 11, fontFamily: "var(--mono)", color: "var(--text3)", marginBottom: 2 }}>{product.id}</div><div style={{ fontSize: 11, color: "var(--text3)" }}>Scan with AccessQR app</div></div>
           <Button variant="primary" onClick={() => alert("QR for " + product.name + " would download here.")} style={{ width: "100%", justifyContent: "center" }} icon="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4 M7 10l5 5 5-5 M12 15V3">Download QR</Button>
           <Button variant="secondary" onClick={() => navigate("edit", { id: product.id })} style={{ width: "100%", justifyContent: "center" }} icon="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7 M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z">Edit product</Button>

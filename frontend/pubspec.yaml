@@ -16,6 +16,7 @@ dependencies:
 
   # Works on Android; Web uses JS interop (see tts_service.dart)
   flutter_tts: ^4.2.0
+  audioplayers: ^6.0.0
 
   # Works on both platforms
   shared_preferences: ^2.3.2

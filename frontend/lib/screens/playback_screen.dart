@@ -16,56 +16,82 @@ class PlaybackScreen extends StatefulWidget {
   @override State<PlaybackScreen> createState() => _PlaybackScreenState();
 }
 
+import 'package:audioplayers/audioplayers.dart';
+
 class _PlaybackScreenState extends State<PlaybackScreen>
     with SingleTickerProviderStateMixin {
-  final _tts = TtsService();
+  final _player = AudioPlayer();
+  final _tts = TtsService(); // fallback for basic announcements if needed
   _PlayState _ps = _PlayState.playing;
-  bool _showFull = false;
-  bool _playingFull = false;
 
   late final AnimationController _wave = AnimationController(
     vsync: this, duration: const Duration(milliseconds: 1100),
   )..repeat(reverse: true);
 
   @override
-  void initState() { super.initState(); _play(); }
+  void initState() {
+    super.initState();
+    _player.onPlayerStateChanged.listen((state) {
+      if (mounted) {
+        setState(() {
+          if (state == PlayerState.playing) _ps = _PlayState.playing;
+          else if (state == PlayerState.paused) _ps = _PlayState.paused;
+          else if (state == PlayerState.completed) _ps = _PlayState.finished;
+          else if (state == PlayerState.stopped) _ps = _PlayState.finished;
+        });
+      }
+    });
+    _play();
+  }
 
   @override
-  void dispose() { _wave.dispose(); _tts.stop(); super.dispose(); }
+  void dispose() { 
+    _wave.dispose(); 
+    _player.dispose(); 
+    _tts.stop(); 
+    super.dispose(); 
+  }
 
   Future<void> _play() async {
     setState(() => _ps = _PlayState.playing);
-    await _tts.speak(widget.product.primaryAudio);
-    if (mounted) setState(() => _ps = _PlayState.finished);
+    if (widget.product.audioUrl.isNotEmpty) {
+      await _player.play(UrlSource(widget.product.audioUrl));
+    } else {
+      await _tts.speak(widget.product.description);
+      if (mounted) setState(() => _ps = _PlayState.finished);
+    }
   }
 
   Future<void> _replay() async {
     HapticFeedback.mediumImpact();
-    setState(() { _ps = _PlayState.playing; _playingFull = false; });
-    await _tts.speak(widget.product.primaryAudio);
-    if (mounted) setState(() => _ps = _PlayState.finished);
+    setState(() => _ps = _PlayState.playing);
+    if (widget.product.audioUrl.isNotEmpty) {
+      await _player.seek(Duration.zero);
+      await _player.resume();
+    } else {
+      await _tts.speak(widget.product.description);
+      if (mounted) setState(() => _ps = _PlayState.finished);
+    }
   }
 
   Future<void> _togglePause() async {
     HapticFeedback.selectionClick();
     if (_ps == _PlayState.playing) {
-      await _tts.stop();
+      if (widget.product.audioUrl.isNotEmpty) await _player.pause();
+      else await _tts.stop();
       setState(() => _ps = _PlayState.paused);
     } else {
       setState(() => _ps = _PlayState.playing);
-      await _tts.speak(widget.product.primaryAudio);
-      if (mounted) setState(() => _ps = _PlayState.finished);
+      if (widget.product.audioUrl.isNotEmpty) await _player.resume();
+      else {
+        await _tts.speak(widget.product.description);
+        if (mounted) setState(() => _ps = _PlayState.finished);
+      }
     }
   }
 
-  Future<void> _moreDetails() async {
-    HapticFeedback.mediumImpact();
-    setState(() { _showFull = true; _playingFull = true; _ps = _PlayState.playing; });
-    await _tts.speak(widget.product.fullAudio);
-    if (mounted) setState(() { _ps = _PlayState.finished; _playingFull = false; });
-  }
-
   void _goHome() {
+    _player.stop();
     _tts.stop();
     Navigator.pushAndRemoveUntil(context,
       MaterialPageRoute(builder: (_) => const HomeScreen()), (_) => false);
@@ -73,9 +99,9 @@ class _PlaybackScreenState extends State<PlaybackScreen>
 
   Color get _stateColor => _ps == _PlayState.paused ? AppTheme.secondary : AppTheme.primary;
   String get _stateLabel => switch (_ps) {
-    _PlayState.playing  => _playingFull ? 'Reading full details…' : AppStrings.playingDesc,
+    _PlayState.playing  => AppStrings.playingDesc,
     _PlayState.paused   => 'Paused',
-    _PlayState.finished => 'Ready',
+    _PlayState.finished => 'Ready to replay',
   };
 
   @override
@@ -114,16 +140,6 @@ class _PlaybackScreenState extends State<PlaybackScreen>
               ),
             ]),
             const SizedBox(height: 20),
-
-            // Cache badge
-            if (widget.fromCache)
-              Padding(padding: const EdgeInsets.only(bottom: 10),
-                child: Row(children: [
-                  const Icon(Icons.offline_bolt, color: AppTheme.secondary, size: 15),
-                  const SizedBox(width: 5),
-                  const Text('Loaded from cache (offline)',
-                    style: TextStyle(color: AppTheme.secondary, fontSize: 12, fontWeight: FontWeight.w600)),
-                ])),
 
             // Category
             if (widget.product.category.isNotEmpty)
@@ -182,34 +198,11 @@ class _PlaybackScreenState extends State<PlaybackScreen>
                 foregroundColor: AppTheme.secondary,
               )),
             ]),
-            const SizedBox(height: 10),
-
-            // More details
-            AccessibleButton(
-              label: AppStrings.moreDetails,
-              semanticLabel: 'Hear full details including ingredients and warnings',
-              onPressed: _moreDetails, icon: Icons.info_outline, height: 62,
-              backgroundColor: AppTheme.primary.withOpacity(0.07),
-              foregroundColor: AppTheme.textPrimary,
-              isLoading: _playingFull,
-            ),
-
-            // Expanded detail sections
-            if (_showFull) ...[
-              const SizedBox(height: 18),
-              _DetailSection(title: 'Ingredients', items: widget.product.ingredients,
-                icon: Icons.list_alt, color: AppTheme.primary),
-              if (widget.product.warnings.isNotEmpty) ...[
-                const SizedBox(height: 10),
-                _DetailSection(title: 'Warnings', items: widget.product.warnings,
-                  icon: Icons.warning_amber, color: AppTheme.danger),
-              ],
-            ],
-
+            
             const SizedBox(height: 18),
             AccessibleButton(
-              label: AppStrings.scanAnother, semanticLabel: 'Scan another product',
-              onPressed: _goHome, icon: Icons.qr_code_scanner,
+               label: AppStrings.scanAnother, semanticLabel: 'Scan another product',
+               onPressed: _goHome, icon: Icons.qr_code_scanner,
             ),
           ]),
         ),
