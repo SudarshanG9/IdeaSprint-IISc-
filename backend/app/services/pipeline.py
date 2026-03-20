@@ -5,6 +5,7 @@ from app.services.tts import text_to_speech
 from app.services.storage import upload_audio
 
 
+
 LANGUAGE_MAP = {
     "en": {
         "name": "English",
@@ -60,7 +61,7 @@ LANGUAGE_MAP = {
     }
 }
 
-def process_product(product, language="en"):
+def process_product(product, db, language="en"):
 
     # Step 1: Generate base English description
     base_text = generate_description(product)
@@ -80,7 +81,12 @@ def process_product(product, language="en"):
     # Step 4: Upload to Supabase
     public_url = upload_audio(audio_path, product.id, lang_code)
 
+    # Step 5: Store audio URL in SQLite
+    product.audio_url = public_url
+    db.commit()
+
     return {
+        "mode": "audio",
         "text": translated_text,
         "audio": public_url
     }

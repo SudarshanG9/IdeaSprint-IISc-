@@ -1,11 +1,11 @@
 from app.services.supabase import supabase
 
-BUCKET_NAME = "audio-files"
+BUCKET_NAME = "audio"
 
 
 def upload_audio(file_path, product_id, language):
 
-    file_name = f"{product_id}_{language}.mp3"
+    file_name = f"{product_id}_{language}.wav"
 
     # Check if file already exists
     existing = supabase.storage.from_(BUCKET_NAME).list()
@@ -17,7 +17,7 @@ def upload_audio(file_path, product_id, language):
         supabase.storage.from_(BUCKET_NAME).upload(
             file_name,
             f,
-            {"content-type": "audio/mpeg"}
+            {"content-type": "audio/wav"}
         )
 
     # public URL

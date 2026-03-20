@@ -14,3 +14,4 @@ class Product(Base):
     language = Column(String, default="en")
     updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     description = Column(Text, nullable=False)
+    audio_url = Column(String, nullable=True)

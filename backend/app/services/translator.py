@@ -3,17 +3,18 @@ from app.config import SARVAM_API_KEY
 
 
 def translate_text(text, target_language):
-    url = "https://api.sarvam.ai/v1/translate"
+    url = "https://api.sarvam.ai/translate"
     headers = {
-        "Authorization": f"Bearer {SARVAM_API_KEY}",
+        "api-subscription-key": SARVAM_API_KEY,
         "Content-Type": "application/json"
     }
 
     data = {
         "input": text,
-        "source_language_code": "en",
+        "source_language_code": "en-IN",
         "target_language_code": target_language,
-        "mode": "formal"
+        "mode": "formal",
+        "speaker": "meera"
     }
 
     response = requests.post(url, headers=headers, json=data)
