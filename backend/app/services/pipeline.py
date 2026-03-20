@@ -65,15 +65,20 @@ def process_product(product, language="en"):
     # Step 1: Generate base English description
     base_text = generate_description(product)
 
-    # Step 2: Translate using Sarvam
-    language = LANGUAGE_MAP[language]["code"]
-    translated_text = translate_text(base_text, language)
+    # Short-circuit if language is English
+    if language == "en":
+        translated_text = base_text
+    else:
+        # Step 2: Translate using Sarvam
+        lang_code = LANGUAGE_MAP[language]["code"]
+        translated_text = translate_text(base_text, lang_code)
 
     # Step 3: Convert to speech using Sarvam
-    audio_path = text_to_speech(translated_text, product.id, language)
+    lang_code = LANGUAGE_MAP[language]["code"]
+    audio_path = text_to_speech(translated_text, product.id, lang_code)
 
     # Step 4: Upload to Supabase
-    public_url = upload_audio(audio_path, product.id, language)
+    public_url = upload_audio(audio_path, product.id, lang_code)
 
     return {
         "text": translated_text,

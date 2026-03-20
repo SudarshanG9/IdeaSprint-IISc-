@@ -1,7 +1,7 @@
 import requests
 import os
+from app.config import SARVAM_API_KEY
 
-SARVAM_API_KEY = "sk_627h8h2i_f4Hz7iqSYb2BPXxu5himKiQf"
 
 def text_to_speech(text, product_id, language):
 
@@ -23,10 +23,11 @@ def text_to_speech(text, product_id, language):
     data = {
         "text": text,
         "language_code": language,
-        "speaker": "female" 
+        "speaker": "female"
     }
 
     response = requests.post(url, json=data, headers=headers)
+    response.raise_for_status()
 
     with open(file_path, "wb") as f:
         f.write(response.content)

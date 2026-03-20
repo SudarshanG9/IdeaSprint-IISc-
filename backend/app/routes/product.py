@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, HTTPException
 from app.db.database import SessionLocal
 from app.models.product import Product
 from app.schemas.product_schemas import ProductCreate
@@ -8,20 +8,18 @@ router = APIRouter()
 
 @router.post("/product")
 def create_product(product: ProductCreate):
+    db = SessionLocal()
     try:
-        db = SessionLocal()
-        product = Product(**product.dict())
-        db.add(product)
+        db_product = Product(**product.dict())
+        db.add(db_product)
         db.commit()
-        db.refresh(product)
+        db.refresh(db_product)
         return {
             "message": "Product created successfully",
-            "product_id": product.id
+            "product_id": db_product.id
         }
     except Exception as e:
-        return {
-            "message": "Product creation failed",
-            "error": str(e)
-        }
+        db.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
     finally:
         db.close()
