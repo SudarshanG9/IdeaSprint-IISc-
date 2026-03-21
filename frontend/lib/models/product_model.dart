@@ -9,6 +9,7 @@ class Product {
   final List<String> warnings;
   final String audioUrl;
   final String detailedAudioUrl;
+  final String detailedDescription;
 
   const Product({
     required this.id,
@@ -19,6 +20,7 @@ class Product {
     required this.warnings,
     this.audioUrl = '',
     this.detailedAudioUrl = '',
+    this.detailedDescription = '',
   });
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
@@ -30,6 +32,7 @@ class Product {
     warnings:    List<String>.from(json['warnings'] ?? []),
     audioUrl:    json['audio_url']?.toString() ?? '',
     detailedAudioUrl: json['detailed_audio_url']?.toString() ?? '',
+    detailedDescription: json['detailed_description']?.toString() ?? '',
   );
 
   Map<String, dynamic> toJson() => {
@@ -38,6 +41,7 @@ class Product {
     'ingredients': ingredients, 'warnings': warnings,
     'audio_url': audioUrl,
     'detailed_audio_url': detailedAudioUrl,
+    'detailed_description': detailedDescription,
   };
 
   String get primaryAudio {

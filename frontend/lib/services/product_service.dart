@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/product_model.dart';
+import '../services/tts_service.dart';
 
 class ProductResult {
   final Product? product;
@@ -24,8 +25,8 @@ class ProductService {
   ProductService._();
 
   // ── Point this to your teammate's backend ──────────────────────────────────
-  // Connect directly over the Local Wi-Fi router natively
-  static const String _baseUrl = 'http://10.235.9.104:8000';
+  // Connect cleanly over the internal Mac Network Loopback socket
+  static const String _baseUrl = 'http://127.0.0.1:8000';
   // ──────────────────────────────────────────────────────────────────────────
 
   /// Real API call

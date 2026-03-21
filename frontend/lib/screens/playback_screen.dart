@@ -6,6 +6,7 @@ import '../models/product_model.dart';
 import '../services/tts_service.dart';
 import '../widgets/accessible_button.dart';
 import 'home_screen.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 enum _PlayState { playing, paused, finished }
 
@@ -15,8 +16,6 @@ class PlaybackScreen extends StatefulWidget {
   const PlaybackScreen({super.key, required this.product, this.fromCache = false});
   @override State<PlaybackScreen> createState() => _PlaybackScreenState();
 }
-
-import 'package:audioplayers/audioplayers.dart';
 
 class _PlaybackScreenState extends State<PlaybackScreen>
     with SingleTickerProviderStateMixin {
@@ -58,6 +57,16 @@ class _PlaybackScreenState extends State<PlaybackScreen>
       await _player.play(UrlSource(widget.product.audioUrl));
     } else {
       await _tts.speak(widget.product.description);
+      if (mounted) setState(() => _ps = _PlayState.finished);
+    }
+  }
+  Future<void> _moreDetails() async {
+    HapticFeedback.selectionClick();
+    setState(() => _ps = _PlayState.playing);
+    if (widget.product.detailedAudioUrl.isNotEmpty) {
+      await _player.play(UrlSource(widget.product.detailedAudioUrl));
+    } else if (widget.product.detailedDescription.isNotEmpty) {
+      await _tts.speak(widget.product.detailedDescription);
       if (mounted) setState(() => _ps = _PlayState.finished);
     }
   }

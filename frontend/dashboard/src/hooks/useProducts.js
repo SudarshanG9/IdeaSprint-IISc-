@@ -34,7 +34,7 @@ export function useProducts() {
     };
 
     try {
-      const response = await fetch("http://10.235.9.104:8000/product", {
+      const response = await fetch("http://127.0.0.1:8000/product", {
         method: "POST",
         headers: { 
           "Content-Type": "application/json"

@@ -19,3 +19,6 @@ https://localhost.run/docs/
 
 ** your connection id is a8bb2b08-3e3d-474b-9760-b6a1d9849fac, please mention it if you send me a message about an issue. **
 
+tcsetattr: Interrupted system call
+Connection to localhost.run closed by remote host.
+Connection to localhost.run closed.
