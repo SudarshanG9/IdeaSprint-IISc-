@@ -1,14 +1,15 @@
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, HTTPException
 from fastapi.responses import FileResponse
-from app.services.qr import generate_qr
+import os
 
 router = APIRouter()
 
 @router.get("/qr/{product_id}")
-def get_qr(product_id: int, request: Request):
-    # Unpack the tuple properly
-    request_base_url = str(request.base_url).rstrip('/')
-    file_path, _ = generate_qr(product_id, request_base_url)
+def get_qr(product_id: int):
+    file_path = f"storage/qr/{product_id}.png"
+    
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="QR code not generated yet")
 
     return FileResponse(
         file_path,

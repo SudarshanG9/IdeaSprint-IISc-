@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useApp } from "../context/AppContext";
 import { PageHeader } from "../components/UI";
 import ProductForm from "../components/ProductForm";
-const EMPTY = { name: "", cat: "", price: "", expiry: "", ingredients: "", warnings: "" };
+const EMPTY = { name: "", cat: "", price: "", expiry: "", ingredients: "", warnings: "", company_url: "" };
 export default function AddProduct() {
   const { addProduct, navigate, showToast } = useApp();
   const [values, setValues] = useState(EMPTY);

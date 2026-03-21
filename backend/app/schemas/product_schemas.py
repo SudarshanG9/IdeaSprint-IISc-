@@ -9,3 +9,4 @@ class ProductCreate(BaseModel):
     region: str = "IN"
     language: str = "en"
     description: str
+    company_url: str | None = None

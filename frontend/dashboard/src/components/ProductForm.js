@@ -20,6 +20,7 @@ export default function ProductForm({ values, onChange, onSubmit, onCancel, subm
         </FormField>
         <FormField label="Price (Rs.)"><Input type="number" value={values.price || ""} onChange={set("price")} placeholder="0.00" min="0" step="0.01" /></FormField>
         <FormField label="Expiry date"><Input type="date" value={values.expiry || ""} onChange={set("expiry")} /></FormField>
+        <div style={{ gridColumn: "1 / -1" }}><FormField label="Company URL" hint="optional, redirects non-app scans here"><Input type="url" value={values.company_url || ""} onChange={set("company_url")} placeholder="https://companywebsite.com" /></FormField></div>
         <div style={{ gridColumn: "1 / -1" }}><FormField label="Ingredients" hint="optional"><Textarea value={values.ingredients || ""} onChange={set("ingredients")} placeholder="List ingredients separated by commas..." /></FormField></div>
         <div style={{ gridColumn: "1 / -1" }}><FormField label="Warnings" hint="optional"><Textarea value={values.warnings || ""} onChange={set("warnings")} placeholder="e.g. Contains gluten, keep away from children..." /></FormField></div>
       </div>

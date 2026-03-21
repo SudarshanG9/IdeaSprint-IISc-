@@ -25,14 +25,16 @@ def create_product(product: ProductCreate, request: Request):
         db.commit()
         db.refresh(db_product)
 
-        # Build absolute base URL securely 
-        request_base_url = str(request.base_url).rstrip('/')
+        # Build absolute base URL from deployed ngrok securely 
+        from app.config import BACKEND_URL
+        request_base_url = BACKEND_URL
+        
         file_path, qr_data = generate_qr(db_product.id, request_base_url)
         
         db_product.qr_url = f"/qr/{db_product.id}"
         db.commit()
 
-        # Construct absolute URL for the QR image using the incoming request's base URL
+        # Construct absolute URL for the QR image using the incoming request's base URL (bypassing ngrok HTML block)
         absolute_qr_url = f"{str(request.base_url).rstrip('/')}/qr/{db_product.id}"
 
         return {

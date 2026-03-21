@@ -17,4 +17,5 @@ class Product(Base):
     detailed_description = Column(Text, nullable=True)
     audio_url = Column(String, nullable=True)
     detailed_audio_url = Column(String, nullable=True)
-    qr_url = Column(String, nullable=True)  
+    qr_url = Column(String, nullable=True)
+    company_url = Column(String, nullable=True)

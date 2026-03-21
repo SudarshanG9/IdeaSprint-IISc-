@@ -30,7 +30,8 @@ export function useProducts() {
       price: parseFloat(data.price) || 0,
       expiry_date: data.expiry ? new Date(data.expiry).toISOString() : new Date().toISOString(),
       description: description,
-      language: "en"
+      language: "en",
+      company_url: data.company_url || null
     };
 
     try {

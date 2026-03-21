@@ -26,7 +26,7 @@ class ProductService {
 
   // ── Point this to your teammate's backend ──────────────────────────────────
   // Connect cleanly over the internal Mac Network Loopback socket
-  static const String _baseUrl = 'http://127.0.0.1:8000';
+  static const String _baseUrl = 'https://crummiest-armanda-overexuberantly.ngrok-free.dev';
   // ──────────────────────────────────────────────────────────────────────────
 
   /// Real API call
@@ -41,7 +41,8 @@ class ProductService {
             Uri.parse('$_baseUrl/p/$productId?lang=$lang'),
             headers: {
               'X-App-Client': 'blind-app',
-              'Bypass-Tunnel-Reminder': 'true'
+              'Bypass-Tunnel-Reminder': 'true',
+              'ngrok-skip-browser-warning': 'true'
             },
           )
           .timeout(const Duration(seconds: 60));

@@ -40,6 +40,9 @@ async def handle_scan(product_id: int, request: Request, lang: str = None):
             })
 
         else:
+            if product.company_url:
+                return RedirectResponse(url=product.company_url)
+
             html_content = f"""
             <html>
                 <head>
