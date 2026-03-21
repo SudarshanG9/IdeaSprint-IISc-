@@ -34,11 +34,10 @@ export function useProducts() {
     };
 
     try {
-      const response = await fetch("https://puny-jokes-tie.loca.lt/product", {
+      const response = await fetch("https://dafae26c90b022.lhr.life/product", {
         method: "POST",
         headers: { 
-          "Content-Type": "application/json",
-          "Bypass-Tunnel-Reminder": "true" 
+          "Content-Type": "application/json"
         },
         body: JSON.stringify(payload)
       });
