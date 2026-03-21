@@ -25,7 +25,7 @@ class ProductService {
 
   // ── Point this to your teammate's backend ──────────────────────────────────
   // Use locatunnel reverse proxy for universal access bypassing Wi-Fi blocks
-  static const String _baseUrl = 'https://large-experts-spend.loca.lt';
+  static const String _baseUrl = 'https://puny-jokes-tie.loca.lt';
   // ──────────────────────────────────────────────────────────────────────────
 
   /// Real API call
@@ -40,6 +40,7 @@ class ProductService {
             Uri.parse('$_baseUrl/p/$productId?lang=$lang'),
             headers: {
               'X-App-Client': 'blind-app',
+              'Bypass-Tunnel-Reminder': 'true'
             },
           )
           .timeout(const Duration(seconds: 15));
