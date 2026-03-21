@@ -24,8 +24,8 @@ class ProductService {
   ProductService._();
 
   // ── Point this to your teammate's backend ──────────────────────────────────
-  // Use 192.168.31.40 for physical Android device testing on local Wi-Fi
-  static const String _baseUrl = 'http://192.168.31.40:8000';
+  // Use 10.235.9.104 for physical Android device testing on local Wi-Fi
+  static const String _baseUrl = 'http://10.235.9.104:8000';
   // ──────────────────────────────────────────────────────────────────────────
 
   /// Real API call

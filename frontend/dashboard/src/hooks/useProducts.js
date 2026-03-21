@@ -34,7 +34,7 @@ export function useProducts() {
     };
 
     try {
-      const response = await fetch("http://192.168.31.40:8000/product", {
+      const response = await fetch("http://10.235.9.104:8000/product", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
