@@ -25,7 +25,7 @@ class ProductService {
 
   // ── Point this to your teammate's backend ──────────────────────────────────
   // Use locatunnel reverse proxy for universal access bypassing Wi-Fi blocks
-  static const String _baseUrl = 'https://dafae26c90b022.lhr.life';
+  static const String _baseUrl = 'https://51f4024de7d1b1.lhr.life';
   // ──────────────────────────────────────────────────────────────────────────
 
   /// Real API call
@@ -43,7 +43,7 @@ class ProductService {
               'Bypass-Tunnel-Reminder': 'true'
             },
           )
-          .timeout(const Duration(seconds: 15));
+          .timeout(const Duration(seconds: 60));
           
       if (res.statusCode == 200) {
         final json = jsonDecode(res.body) as Map<String, dynamic>;

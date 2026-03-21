@@ -34,7 +34,7 @@ export function useProducts() {
     };
 
     try {
-      const response = await fetch("https://dafae26c90b022.lhr.life/product", {
+      const response = await fetch("https://51f4024de7d1b1.lhr.life/product", {
         method: "POST",
         headers: { 
           "Content-Type": "application/json"
