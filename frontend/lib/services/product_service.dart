@@ -24,8 +24,8 @@ class ProductService {
   ProductService._();
 
   // ── Point this to your teammate's backend ──────────────────────────────────
-  // Use 10.235.9.104 for physical Android device testing on local Wi-Fi
-  static const String _baseUrl = 'http://10.235.9.104:8000';
+  // Use locatunnel reverse proxy for universal access bypassing Wi-Fi blocks
+  static const String _baseUrl = 'https://large-experts-spend.loca.lt';
   // ──────────────────────────────────────────────────────────────────────────
 
   /// Real API call
@@ -38,7 +38,10 @@ class ProductService {
       final res = await http
           .get(
             Uri.parse('$_baseUrl/p/$productId?lang=$lang'),
-            headers: {'X-App-Client': 'blind-app'},
+            headers: {
+              'X-App-Client': 'blind-app',
+              'Bypass-Tunnel-Reminder': 'true'
+            },
           )
           .timeout(const Duration(seconds: 15));
           

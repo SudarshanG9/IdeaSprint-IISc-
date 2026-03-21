@@ -34,9 +34,12 @@ export function useProducts() {
     };
 
     try {
-      const response = await fetch("http://10.235.9.104:8000/product", {
+      const response = await fetch("https://large-experts-spend.loca.lt/product", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Bypass-Tunnel-Reminder": "true" 
+        },
         body: JSON.stringify(payload)
       });
       if (!response.ok) throw new Error("Failed to create product on backend.");
