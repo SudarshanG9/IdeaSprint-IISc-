@@ -24,8 +24,8 @@ class ProductService {
   ProductService._();
 
   // ── Point this to your teammate's backend ──────────────────────────────────
-  // Use locatunnel reverse proxy for universal access bypassing Wi-Fi blocks
-  static const String _baseUrl = 'https://51f4024de7d1b1.lhr.life';
+  // Connect directly over the Local Wi-Fi router natively
+  static const String _baseUrl = 'http://10.235.9.104:8000';
   // ──────────────────────────────────────────────────────────────────────────
 
   /// Real API call

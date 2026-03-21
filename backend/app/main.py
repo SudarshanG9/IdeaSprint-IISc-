@@ -17,6 +17,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/")
+def read_root():
+    return {"status": "AccessQR FastAPI Backend is Live & Tunneling Successfully!"}
+
+@app.get("/favicon.ico", status_code=204)
+def favicon():
+    return None
+
 app.include_router(product.router)
 app.include_router(scan.router)
 app.include_router(qr.router)
