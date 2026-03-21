@@ -1,8 +1,8 @@
-fastapi
 uvicorn
 sqlalchemy
 pydantic
 requests
 supabase
-python-dotenv
+pytz==2024.1
+google-generativeaihon-dotenv
 qrcode[pil]

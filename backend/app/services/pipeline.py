@@ -62,31 +62,37 @@ LANGUAGE_MAP = {
 }
 
 def process_product(product, db, language="en"):
+    primary_text = product.description
+    detailed_text = product.detailed_description or ""
 
-    # Step 1: Generate base English description
-    base_text = generate_description(product)
-
-    # Short-circuit if language is English
     if language == "en":
-        translated_text = base_text
+        translated_primary = primary_text
+        translated_detailed = detailed_text
     else:
-        # Step 2: Translate using Sarvam
         lang_code = LANGUAGE_MAP[language]["code"]
-        translated_text = translate_text(base_text, lang_code)
+        translated_primary = translate_text(primary_text, lang_code)
+        translated_detailed = translate_text(detailed_text, lang_code) if detailed_text else ""
 
-    # Step 3: Convert to speech using Sarvam
-    lang_code = LANGUAGE_MAP[language]["code"]
-    audio_path = text_to_speech(translated_text, product.id, lang_code)
+    lang_code = LANGUAGE_MAP[language]["code"] if language != "en" else "en-IN"
 
-    # Step 4: Upload to Supabase
-    public_url = upload_audio(audio_path, product.id, lang_code)
+    # Convert to speech & Upload PRIMARY
+    primary_audio_path = text_to_speech(translated_primary, f"{product.id}_primary", lang_code)
+    primary_public_url = upload_audio(primary_audio_path, f"{product.id}_primary", lang_code)
 
-    # Step 5: Store audio URL in SQLite
-    product.audio_url = public_url
+    # Convert to speech & Upload DETAILED
+    detailed_public_url = None
+    if translated_detailed:
+        detailed_audio_path = text_to_speech(translated_detailed, f"{product.id}_detailed", lang_code)
+        detailed_public_url = upload_audio(detailed_audio_path, f"{product.id}_detailed", lang_code)
+
+    product.audio_url = primary_public_url
+    product.detailed_audio_url = detailed_public_url
     db.commit()
 
     return {
         "mode": "audio",
-        "text": translated_text,
-        "audio": public_url
+        "text": translated_primary,
+        "audio": primary_public_url,
+        "detailed_text": translated_detailed,
+        "detailed_audio": detailed_public_url
     }

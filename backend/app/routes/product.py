@@ -12,6 +12,15 @@ def create_product(product: ProductCreate, request: Request):
     db = SessionLocal()
     try:
         db_product = Product(**product.dict())
+        
+        # Intercept database creation to parse payload through Gemini LLM first
+        from app.services.generator import generate_description
+        primary, detailed = generate_description(db_product)
+        
+        # Override the old raw input with beautifully structured AI generations
+        db_product.description = primary
+        db_product.detailed_description = detailed
+
         db.add(db_product)
         db.commit()
         db.refresh(db_product)

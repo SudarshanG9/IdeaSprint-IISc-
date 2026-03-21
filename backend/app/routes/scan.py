@@ -34,7 +34,9 @@ async def handle_scan(product_id: int, request: Request, lang: str = None):
                 "name": product.name,
                 "status": "ready",
                 "audio_url": result["audio"],
-                "description": result["text"]
+                "description": result["text"],
+                "detailed_audio_url": result.get("detailed_audio"),
+                "detailed_description": result.get("detailed_text")
             })
 
         else:

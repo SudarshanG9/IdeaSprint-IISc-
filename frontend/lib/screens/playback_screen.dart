@@ -199,6 +199,18 @@ class _PlaybackScreenState extends State<PlaybackScreen>
               )),
             ]),
             
+            const SizedBox(height: 10),
+
+            // More details
+            if (widget.product.detailedAudioUrl.isNotEmpty)
+              AccessibleButton(
+                label: AppStrings.moreDetails,
+                semanticLabel: 'Hear full details including ingredients and warnings',
+                onPressed: _moreDetails, icon: Icons.info_outline, height: 62,
+                backgroundColor: AppTheme.primary.withOpacity(0.07),
+                foregroundColor: AppTheme.textPrimary,
+              ),
+            
             const SizedBox(height: 18),
             AccessibleButton(
                label: AppStrings.scanAnother, semanticLabel: 'Scan another product',
