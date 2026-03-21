@@ -34,11 +34,10 @@ export function useProducts() {
     };
 
     try {
-      const response = await fetch("https://large-experts-spend.loca.lt/product", {
+      const response = await fetch("http://10.235.9.104:8000/product", {
         method: "POST",
         headers: { 
-          "Content-Type": "application/json",
-          "Bypass-Tunnel-Reminder": "true" 
+          "Content-Type": "application/json"
         },
         body: JSON.stringify(payload)
       });

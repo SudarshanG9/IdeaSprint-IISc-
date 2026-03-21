@@ -40,7 +40,6 @@ class ProductService {
             Uri.parse('$_baseUrl/p/$productId?lang=$lang'),
             headers: {
               'X-App-Client': 'blind-app',
-              'Bypass-Tunnel-Reminder': 'true'
             },
           )
           .timeout(const Duration(seconds: 15));
